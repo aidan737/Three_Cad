@@ -8,20 +8,55 @@ use std::sync::{Arc, Mutex};
 //list of objects to render
 pub static OBJECTS_3D: Mutex<Vec<cad_object_3d>> = Mutex::new(vec![]);
 
+static camera_rotation_x: Mutex<f64> = Mutex::new(0.0);
+static camera_rotation_y: Mutex<f64> = Mutex::new(1.0);
+static original_mouse_pos: Mutex<[f64; 2]> = Mutex::new([0.0, 0.0]);
 
-
-
-pub fn Render_Objects(c: &Context, g: &mut G2d, window_width: f64, window_hight: f64)
+pub fn Render_Objects(c: &Context, g: &mut G2d, window_width: f64, window_hight: f64, mouse_position:[f64; 2], mouse_pressed:bool)
 {
-    let mut camera_rotation_x:f64 = 0.0;
-    let mut camera_rotation_y:f64 = 1.0;
+
     //INITIALIZE 3D
     Begin_3d();
 
     let global_vec = Arc::new(OBJECTS_3D.lock().unwrap());
 
-    
-    render_3d(&c,g,&global_vec,camera_rotation_x,camera_rotation_y,window_hight,window_width);
+    let mut cam_rotation_x = camera_rotation_x.lock().unwrap();
+    let mut cam_rotation_y = camera_rotation_y.lock().unwrap();
+    let mut cam_speed:f64 = 0.02;
+    //control for camera rotation
+    let mut original_mouse_position = original_mouse_pos.lock().unwrap();
+    if(mouse_pressed)
+    {
+      
+        //cheaking x position
+        if(original_mouse_position[1]>mouse_position[1])
+        {
+         *cam_rotation_x += cam_speed;
+        }
+        if(original_mouse_position[1]<mouse_position[1])
+        {
+         *cam_rotation_x -= cam_speed;
+        }
+        if(original_mouse_position[0]>mouse_position[0])
+        {
+         *cam_rotation_y += cam_speed;
+        }
+        if(original_mouse_position[0]<mouse_position[0])
+        {
+         *cam_rotation_y -= cam_speed;
+        }
+        *original_mouse_position = mouse_position;
+    }else
+    {
+        //cheak to ensure that no movment is made when the mouse is not pressed
+        *original_mouse_position = mouse_position;
+    }
+
+
+
+
+
+    render_3d(&c,g,&global_vec,*cam_rotation_x,*cam_rotation_y,window_hight,window_width);
 }
 
 pub fn add_object()

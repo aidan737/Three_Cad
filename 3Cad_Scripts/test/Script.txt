@@ -1,1 +1,3 @@
 add_shape();
+
+get_information_number();

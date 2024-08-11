@@ -23,7 +23,7 @@ fn get_buttons_mut() -> Option<Arc<Mutex<Vec<Button>>>> {
     unsafe { BUTTONS.as_mut().map(|b| b).cloned() } // Dereference the Arc to get the Mutex
 }
 
-pub fn render_toolbar(c: &Context, g: &mut G2d, mouse_position:[f64; 2], width: f64, hight: f64, mouse:bool)
+pub fn render_toolbar(c: &Context, g: &mut G2d, mouse_position:[f64; 2], width: f64, hight: f64, mouse:bool, keypressed:Key)
 {
 
     
@@ -91,24 +91,9 @@ pub fn render_toolbar(c: &Context, g: &mut G2d, mouse_position:[f64; 2], width: 
 
 
     //running scripts that are uploaded by the user pushing buttons
-    Script_Runner::run_scripts(&c,g,mouse_position,width,hight,mouse);
+    Script_Runner::run_scripts(&c,g,mouse_position,width,hight,mouse,keypressed);
 }
 
-
-fn is_point_in_rectangle(point: &Point2d, rect_point: &Point2d,size: &Point2d) -> bool {
-    let x = point.point_x;
-    let y = point.point_y;
-    let rect_x = rect_point.point_x;
-    let rect_y = rect_point.point_y;
-    let rect_width = size.point_x;
-    let rect_height = size.point_y;
-
-    if x >= rect_x && x <= rect_x + rect_width && y >= rect_y && y <= rect_y + rect_height {
-        return true;
-    }
-
-    false
-}
 
 
 
