@@ -1,0 +1,10 @@
+[package]
+name = "Three_Cad"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+Three_D_Libary = { path = "../../3D_Libary/Three_D_Libary/"}
+hlua = "0.3"
