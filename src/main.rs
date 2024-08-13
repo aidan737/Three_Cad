@@ -4,8 +4,6 @@ use two_d_functions::*;
 #[path = "Toolbar/ToolbarRender.rs"] mod toolbar_render;
 
 
-// important variables
-const is_2d_mode:bool = false;
 
 
 
